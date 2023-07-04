@@ -1,15 +1,15 @@
 import process from "process";
 
-import chalk from "chalk";
+import pc from "picocolors";
 
 import { ObjectBase } from "../bases/object-base";
 
-const DEFAULT_LOG_PREFIX = chalk.blackBright( "⚪ - [LOG]" ),
-    DEFAULT_INFO_PREFIX = chalk.blue( "🔵 - [INFO]" ),
-    DEFAULT_DEBUG_PREFIX = chalk.grey( "🟤 - [DEBUG]" ),
-    DEFAULT_WARN_PREFIX = chalk.yellow( "🟡 - [WARN]" ),
-    DEFAULT_ERROR_PREFIX = chalk.red( "🔴 - [ERROR]" ),
-    DEFAULT_ADMIN_PREFIX = chalk.yellowBright( "🟣 - [ADMIN]" );
+const DEFAULT_LOG_PREFIX = pc.white( "⚪ - [LOG]" ),
+    DEFAULT_INFO_PREFIX = pc.blue( "🔵 - [INFO]" ),
+    DEFAULT_DEBUG_PREFIX = pc.gray( "🟤 - [DEBUG]" ),
+    DEFAULT_WARN_PREFIX = pc.yellow( "🟡 - [WARN]" ),
+    DEFAULT_ERROR_PREFIX = pc.red( "🔴 - [ERROR]" ),
+    DEFAULT_ADMIN_PREFIX = pc.bold( "🟣 - [ADMIN]" );
 
 export type ICaller = Function | String;
 
@@ -179,7 +179,7 @@ export class Logger extends ObjectBase {
     }
 
     private output( prefix: string, caller: ICaller, message: string, ... params: any[] ): void {
-        const source = this.getPreviousSource() + chalk.whiteBright( this.ownerName + "::" + this.getCallerName( caller ) );
+        const source = this.getPreviousSource() + pc.white( this.ownerName + "::" + this.getCallerName( caller ) );
 
         let messagePrefix = "";
 
@@ -193,5 +193,3 @@ export class Logger extends ObjectBase {
     }
 
 }
-
-export default Logger;
