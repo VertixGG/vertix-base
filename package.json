@@ -11,7 +11,8 @@
   },
   "scripts": {
     "prisma-generate": "npx prisma generate --schema prisma/bot.schema.prisma & npx prisma generate --schema prisma/api.schema.prisma",
-
-    "bot-start-dev": "cd ../vertix-bot/ && yarn start-dev"
+    "bot-start-dev": "cd ../vertix-bot/ && yarn start-dev",
+    "api-start-dev": "cd ../vertix-api/ && yarn start:dev",
+    "dashboard-start-dev": "cd ../vertix-dashboard/ && yarn start"
   }
 }

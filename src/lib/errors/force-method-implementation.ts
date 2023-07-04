@@ -1,4 +1,4 @@
-import ObjectBase from "../bases/object-base";
+import { ObjectBase } from "../bases/object-base";
 
 export class ForceMethodBase extends Error {
     public constructor( className: string, methodName: string ) {
