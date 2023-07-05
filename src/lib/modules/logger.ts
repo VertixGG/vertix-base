@@ -21,7 +21,7 @@ export class Logger extends ObjectBase {
     private messagePrefixes: string[] = [];
 
     public static getName(): string {
-        return "Modules/Logger";
+        return "VertixBase/Modules/Logger";
     }
 
     public constructor( owner: ObjectBase | typeof ObjectBase | string ) {
