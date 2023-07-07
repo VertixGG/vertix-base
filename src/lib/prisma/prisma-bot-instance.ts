@@ -20,10 +20,10 @@ type QueryEvent = {
 export class PrismaBotInstance extends ObjectBase {
     private static instance: PrismaBotInstance;
 
-    private logger: Logger;
-    private debugger: Debugger;
+    protected logger: Logger;
+    protected debugger: Debugger;
 
-    private client: PrismaClient;
+    protected client: PrismaClient;
 
     public static getName() {
         return "VertixBase/Prisma/PrismaBotInstance";
@@ -47,7 +47,7 @@ export class PrismaBotInstance extends ObjectBase {
         return prisma.client;
     }
 
-    private constructor() {
+    public constructor() {
         super();
 
         this.logger = new Logger( this );
@@ -84,6 +84,10 @@ export class PrismaBotInstance extends ObjectBase {
         return this.client.$connect().catch( ( error ) => {
             this.logger.error( "constructor", "Failed to connect to database", error );
         } );
+    }
+
+    public getClient() {
+        return this.client;
     }
 
     private async onError( error: any ) {

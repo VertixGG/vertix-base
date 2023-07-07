@@ -1,7 +1,7 @@
 import {
     DEFAULT_BADWORDS,
     DEFAULT_BADWORDS_SEPARATOR
-} from "../definitions/badwords";
+} from "../definitions/badwords-defaults";
 
 const isMatch = ( word: string, badword: string ): boolean => {
     const regex = new RegExp( `^${badword.replace(/\*/g, ".*")}$`, "i" );

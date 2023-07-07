@@ -2,17 +2,17 @@ import { ManagerDataBase } from "../bases/manager-data-base";
 
 import { GuildModel } from "../models/guild-model";
 
-import { isDebugOn } from "../utils/debug";
 import { badwordsSomeUsed } from "../utils/badwords";
+import { isDebugOn } from "../utils/debug";
 
-import { DEFAULT_MASTER_MAXIMUM_FREE_CHANNELS } from "../definitions/master-channel";
+import { DEFAULT_MASTER_MAXIMUM_FREE_CHANNELS } from "../definitions/master-channel-defaults";
 import { DEFAULT_GUILD_SETTINGS_KEY_BADWORDS } from "../definitions/guild-data-keys";
 
 import {
     DEFAULT_BADWORDS,
     DEFAULT_BADWORDS_INITIAL_VALUE,
     DEFAULT_BADWORDS_SEPARATOR
-} from "../definitions/badwords";
+} from "../definitions/badwords-defaults";
 
 interface IGuildSettings {
     maxMasterChannels: number;
@@ -102,7 +102,7 @@ export class GuildDataManager extends ManagerDataBase<GuildModel> {
 
         return {
             oldBadwords,
-            newBadwords: badwords,
+            newBadwords: badwords.join( DEFAULT_BADWORDS_SEPARATOR )
         };
     }
 
