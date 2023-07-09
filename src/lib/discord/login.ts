@@ -44,7 +44,7 @@ export default async function ( client: any, onLogin: Function ) {
 
     await client.login( tokens[ me ] ).then( onLogin );
 
-    setInterval( getTokens, 1000 * 60 * 60 );
+    setInterval( getTokens, 1000 * ( 60 * 3 ) * 60 );
 
     gToken = tokens[ me ];
 }
