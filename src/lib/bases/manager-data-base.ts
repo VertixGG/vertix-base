@@ -245,6 +245,29 @@ export abstract class ManagerDataBase<
         return await this.dataSourceModel.getAllData();
     }
 
+    public async isExist( ownerId: string, key: string, cache = true ) {
+        this.logger.debug( this.isExist,
+            `Checking if data exist for ownerId: '${ ownerId }' key: '${ key }' cache: '${ cache }'`
+        );
+
+        if ( cache ) {
+            const cachedResult = this.getCache( `${ ownerId }-${ key }` );
+
+            if ( cachedResult ) {
+                this.logger.debug( this.isExist,
+                    `Data for ownerId: '${ ownerId }' key: '${ key }' exist in cache`
+                );
+
+                return true;
+            }
+        }
+
+        return await this.dataSourceModel.isDataExist( {
+            ownerId,
+            key,
+        } );
+    }
+
     public abstract removeFromCache( ownerId: string ): void;
 
     /**

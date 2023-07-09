@@ -54,11 +54,13 @@ export interface IDataModel {
 
     setData( args: IDataUpdateArgs ): Promise<DataResult | void>
 
-    deleteData( args: IDataSelectUniqueArgs ): Promise<DataResult>
-
     getAllData(): Promise<DataResult[]>
 
     getInternalNormalizedData( args: IDataCreateArgs ): DataResult;
+
+    deleteData( args: IDataSelectUniqueArgs ): Promise<DataResult>
+
+    isDataExist( args: IDataSelectUniqueArgs ): Promise<boolean>;
 }
 
 export interface IOwnerInnerModel {
@@ -106,4 +108,9 @@ export interface IDataInnerModel {
         where?: any,
         include?: any
     } ): Promise<any>,
+
+    findUnique( args: {
+        where: any,
+        include?: any,
+    } ): Promise<any>
 }

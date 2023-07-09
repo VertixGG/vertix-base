@@ -42,7 +42,7 @@ const extendedModel = Prisma.defineExtension( ( client ) => {
 
 const prisma = PrismaBotInstance.getClient().$extends( extendedModel );
 
-export class    ChannelModel extends ModelDataBase<typeof prisma.channel, typeof prisma.channelData, ChannelResult> {
+export class ChannelModel extends ModelDataBase<typeof prisma.channel, typeof prisma.channelData, ChannelResult> {
     private static instance: ChannelModel;
 
     public static getName(): string {

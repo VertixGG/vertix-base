@@ -3,11 +3,13 @@ import { ChannelDataManager } from "./channel-data-manager";
 import { isDebugOn } from "../utils/debug";
 
 import {
+    DEFAULT_DYNAMIC_CHANNEL_AUTOSAVE,
     DEFAULT_DYNAMIC_CHANNEL_MENTIONABLE,
     DEFAULT_MASTER_CHANNEL_DATA_DYNAMIC_CHANNEL_SETTINGS
 } from "../definitions/master-channel-defaults";
 
 import {
+    MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_AUTOSAVE,
     MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_BUTTONS_TEMPLATE,
     MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_LOGS_CHANNEL_ID,
     MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_MENTIONABLE,
@@ -94,6 +96,28 @@ export class MasterChannelDataManager extends ChannelDataManager {
         return mentionable;
     }
 
+    public async getChannelAutosave( ownerId: string, returnDefault?: boolean ) {
+        const result = await ChannelDataManager.$.getSettingsData(
+            ownerId,
+            returnDefault ? DEFAULT_MASTER_CHANNEL_DATA_DYNAMIC_CHANNEL_SETTINGS : null,
+            true
+        );
+
+        let autosave = result?.object?.[ MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_AUTOSAVE ];
+
+        // TODO: Temporary fix, find out why default not working.
+        if ( autosave === undefined ) {
+            autosave = DEFAULT_DYNAMIC_CHANNEL_AUTOSAVE;
+        }
+
+        this.debugger.dumpDown( this.getChannelAutosave,
+            autosave,
+            `ownerId: '${ ownerId }' returnDefault: '${ returnDefault }' - autosave: `
+        );
+
+        return autosave;
+    }
+
     public async getChannelVerifiedRoles( ownerId: string, guildId: string ) {
         const result = await ChannelDataManager.$.getSettingsData(
             ownerId,
@@ -173,12 +197,28 @@ export class MasterChannelDataManager extends ChannelDataManager {
 
         if ( shouldAdminLog ) {
             this.logger.admin( this.setChannelMentionable,
-                `📌  Dynamic Channel mentionable modified  - ownerId: "${ ownerId }", "${ mentionable }"`
+                `@  Dynamic Channel mentionable modified  - ownerId: "${ ownerId }", "${ mentionable }"`
             );
         }
 
         await ChannelDataManager.$.setSettingsData( ownerId, {
             [ MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_MENTIONABLE ]: mentionable
+        } );
+    }
+
+    public async setChannelAutoSave( ownerId: string, autoSave: boolean, shouldAdminLog = true ) {
+        this.logger.log( this.setChannelAutoSave,
+            `Master channel id: '${ ownerId }' - Setting channel auto save: '${ autoSave }'`
+        );
+
+        if ( shouldAdminLog ) {
+            this.logger.admin( this.setChannelAutoSave,
+                `⮑  Dynamic Channel auto save modified  - ownerId: "${ ownerId }", "${ autoSave }"`
+            );
+        }
+
+        await ChannelDataManager.$.setSettingsData( ownerId, {
+            [ MASTER_CHANNEL_SETTINGS_KEY_DYNAMIC_CHANNEL_AUTOSAVE ]: autoSave
         } );
     }
 
@@ -211,7 +251,7 @@ export class MasterChannelDataManager extends ChannelDataManager {
 
         if ( shouldAdminLog ) {
             this.logger.admin( this.setChannelLogsChannel,
-                `✎ Set log channel  - ownerId: "${ ownerId }" channelId: "${ channelId }"`
+                `❯❯ Set log channel  - ownerId: "${ ownerId }" channelId: "${ channelId }"`
             );
         }
 

@@ -149,6 +149,20 @@ export abstract class ModelDataBase<
         } );
     }
 
+    public async isDataExist( args: IDataSelectUniqueArgs ) {
+        const result = await this.dataModel.findUnique( {
+            where: {
+                ownerId_key: {
+                    ownerId: args.ownerId,
+                    key: args.key,
+                },
+            },
+        } );
+
+        return !! result;
+    }
+
+
     protected abstract getOwnerIdFieldName(): string;
 
     protected abstract getOwnerModel(): TOwnerModel;
