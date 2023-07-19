@@ -2,11 +2,11 @@ import * as util from "util";
 
 import { PermissionOverwriteManager, PermissionOverwrites } from "discord.js";
 
-import chalk from "chalk";
+import pc from "picocolors";
 
 import { ObjectBase } from "../bases/object-base";
 
-import Logger from "./logger";
+import { Logger } from "./logger";
 
 export class Debugger extends ObjectBase {
     private readonly shouldDebug: boolean;
@@ -16,7 +16,7 @@ export class Debugger extends ObjectBase {
     declare private finalizationRegistry;
 
     public static getName() {
-        return "Internal/Modules/Debugger";
+        return "VertixBase/Modules/Debugger";
     }
 
     public constructor( owner: ObjectBase | typeof ObjectBase | string, prefix?: string, shouldDebug = true ) {
@@ -69,7 +69,7 @@ export class Debugger extends ObjectBase {
         }
 
         this.log( source, `${ objectName ? objectName + ":" : "" } ` + "🔽" + "\n" +
-            chalk.hex( "FFA500" )( util.inspect( object, false, null, true ) )
+            pc.green( util.inspect( object, false, null, true ) )
         );
     }
 

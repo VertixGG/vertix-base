@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("PRISMA_BOT_DATABASE_URL")
+  url      = env("BOT_PRISMA_DATABASE_URL")
 }
 
 enum E_INTERNAL_CHANNEL_TYPES {
@@ -29,6 +29,26 @@ model Guild {
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
   updatedAtInternal DateTime?
+}
+
+model GuildData {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  // ---
+  key       String
+  type      String   @default("default")
+  // ---
+  object    Json?
+  values    String[]
+  // ---
+  version   String?
+  // ---
+  ownerId   String   @db.ObjectId
+  guild     Guild    @relation("GuildData", fields: [ownerId], references: [id], onDelete: Cascade)
+  // ---
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([ownerId, key])
 }
 
 model Category {
@@ -84,7 +104,19 @@ model ChannelData {
   @@unique([ownerId, key])
 }
 
-model GuildData {
+model User {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  // ---
+  userId    String     @unique
+  username  String?
+  // ---
+  data      UserData[] @relation("UserData")
+  // ---
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model UserData {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   // ---
   key       String
@@ -96,7 +128,7 @@ model GuildData {
   version   String?
   // ---
   ownerId   String   @db.ObjectId
-  guild     Guild    @relation("GuildData", fields: [ownerId], references: [id], onDelete: Cascade)
+  user      User     @relation("UserData", fields: [ownerId], references: [id], onDelete: Cascade)
   // ---
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
