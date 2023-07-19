@@ -73,7 +73,7 @@ export class UserModel extends ModelDataBase<typeof client.user, typeof client.u
         return result;
     }
 
-    public async transferData( userId: string, newOwnerId: string ) {
+    public async transferData( userId: string, newOwnerId: string, masterChannelDBId: string ) {
         this.logger.log( this.transferData,
             `User id: '${ userId }' - Transferring data to new owner id: '${ newOwnerId }'`
         );
@@ -99,10 +99,37 @@ export class UserModel extends ModelDataBase<typeof client.user, typeof client.u
         this.deleteCache( userId );
         this.deleteCache( newOwnerId );
 
-        await this.getDataModel().updateMany( {
-            where: { ownerId: oldUser.id },
-            data: { ownerId: newUser.id }
+        // #Note: What happens if the owner with the current key already exists?
+        const dataKey = "masterChannelData_" + masterChannelDBId;
+
+        // If data with same key and ownerId already exists, do nothing.
+        const newOwnerData = await this.getDataModel().findFirst( {
+            where: {
+                key: dataKey,
+                ownerId: newUser.id,
+            }
         } );
+
+        // TODO: Find better solution.
+        if ( ! newOwnerData ) {
+            // Transfer data ownership.
+            await this.getDataModel().updateMany( {
+                where: { key: dataKey, ownerId: oldUser.id },
+                data: { ownerId: newUser.id }
+            } );
+        } else {
+            // Delete old ownerData.
+            await this.getDataModel().deleteMany( {
+                where: {
+                    ownerId: oldUser.id,
+                    key: dataKey
+                }
+            } );
+
+            this.logger.warn( this.transferData,
+                `User id: '${ userId }' - Owner data already exists, data was not transferred, old user data was deleted`
+            );
+        }
 
         return true;
     }
