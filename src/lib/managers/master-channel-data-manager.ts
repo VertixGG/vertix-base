@@ -213,7 +213,7 @@ export class MasterChannelDataManager extends ChannelDataManager {
 
         if ( shouldAdminLog ) {
             this.logger.admin( this.setChannelAutoSave,
-                `⮑  Dynamic Channel auto save modified  - ownerId: "${ ownerId }", "${ autoSave }"`
+                `⫸  Dynamic Channel auto save modified  - ownerId: "${ ownerId }", "${ autoSave }"`
             );
         }
 
